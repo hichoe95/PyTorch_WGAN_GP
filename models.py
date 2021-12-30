@@ -63,17 +63,19 @@ class Generator(nn.Module):
         layers.append(nn.LeakyReLU(0.02))
 
         # channel up
-        # 256, 512
+        # 256, 512, 1024, 2048
         for i in range(4):
-            out_ch = in_ch * 2 if i<2 else in_ch
+            out_ch = in_ch * 2 if i<4 else in_ch
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
+            layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
             in_ch = out_ch
         
         # channel down
-        # 512
+        # 2048, 1024,  512
         for i in range(3):
-            out_ch = in_ch // 2 if i > 1 else in_ch
+            out_ch = in_ch // 2
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
+            layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
             in_ch = out_ch
         
         # To RGB
@@ -102,7 +104,7 @@ class Generator_up(nn.Module):
         layers.append(ConvBlock(args = configs, in_ch = self.latent_dim, out_ch = in_ch, bias = False, type = 'up'))
         
         # channel up
-        for out_ch in [256, 512, 512, 512, 512, 256]:
+        for out_ch in [256, 512, 1024, 2048, 512, 256]:
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
             layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
             in_ch = out_ch
@@ -129,14 +131,20 @@ class Discriminator(nn.Module):
         layers = []
         layers.append(ConvBlock(args = configs, in_ch = 3, out_ch = 64, bias = True, type = 'down'))
         
+
         in_ch = out_ch
         # channel up
+        # 128, 256, 512, 1024, 2048
+        # 32, 16, 8, 4, 2, 1. 
         for i in range(6):
-            out_ch = in_ch * 2
+            out_ch = in_ch * 2 if i < 4 else in_ch
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = True, type = 'down'))
             in_ch = out_ch
         
-        layers.append(nn.Conv2d(in_ch, 3, 1, 1, bias = False))
+        layers.append(nn.Conv2d(in_ch, 1, 3, 1, 1, bias = False))
+
+        if configs.loss == 'bce':
+            layers.append(nn.Sigmoid())
         
         self.main = nn.Sequential(*layers)
         

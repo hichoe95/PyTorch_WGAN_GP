@@ -51,7 +51,7 @@ class ConvBlock(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, configs, in_ch = 128):
+    def __init__(self, configs, in_ch = 256):
         super(Generator, self).__init__()
 
         self.latent_dim = configs.latent_dim
@@ -91,7 +91,7 @@ class Generator(nn.Module):
 
 
 class Generator_up(nn.Module):
-    def __init__(self, configs, in_ch = 128):
+    def __init__(self, configs, in_ch = 256):
         super(Generator_up, self).__init__()
         
         self.latent_dim = configs.latent_dim
@@ -102,15 +102,14 @@ class Generator_up(nn.Module):
         layers.append(ConvBlock(args = configs, in_ch = self.latent_dim, out_ch = in_ch, bias = False, type = 'up'))
         
         # channel up
-        # 256, 512, 512, 256, 128, 64
-        for out_ch in [128, 256, 512, 512, 256, 128]:
+        for out_ch in [256, 512, 512, 512, 512, 256]:
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
             layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
-            layers.append(nn.Conv2d(out_ch, out_ch, 3, 1, 1, bias = False))
             in_ch = out_ch
-        
+
+
         # To RGB
-        layers.append(nn.Conv2d(out_ch, 3, kernel_size=7, stride=1, padding=3, bias = False))
+        layers.append(nn.Conv2d(out_ch, 3, kernel_size=3, stride=1, padding=1, bias = False))
         layers.append(nn.Tanh())
     
         self.main = nn.Sequential(*layers)
@@ -133,12 +132,11 @@ class Discriminator(nn.Module):
         in_ch = out_ch
         # channel up
         for i in range(6):
-            out_ch = in_ch * 2 if out_ch < 512 else out_ch
+            out_ch = in_ch * 2
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = True, type = 'down'))
             in_ch = out_ch
         
-        # layers.append(nn.Conv2d(cur_ch, cur_ch//2, 1, 1))
-        layers.append(nn.Conv2d(in_ch, 1, 1, 1, bias = False))
+        layers.append(nn.Conv2d(in_ch, 3, 1, 1, bias = False))
         
         self.main = nn.Sequential(*layers)
         

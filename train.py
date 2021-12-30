@@ -135,7 +135,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
 
         # learning rate decay
         
-        if i >= 10000 and i % 1000 == 0:
+        if i >= 100000 and i % 1000 == 0:
             g_lr -= (g_lr / float(100000))
             d_lr -= (d_lr / float(100000))
             for p_G, p_D in zip(optim_G.param_groups, optim_D.param_groups):
@@ -166,7 +166,7 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
     g_lr = configs.lr
     d_lr = configs.lr
     
-    adversarial_loss = torch.nn.BCEloss()
+    adversarial_loss = torch.nn.BCELoss()
         
     for i in tqdm(range(configs.iter_num)):
         
@@ -180,12 +180,12 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         
         # for real
         d_real_out = D(reals)
-        loss_real = adversarial_loss(d_real_out, torch.tensor((configs.batch_size, 1)).fill_(1.).requires_grad_(False))
+        loss_real = adversarial_loss(d_real_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
         
         # for fake
         fake_img = G(latents)
         d_fake_out = D(fake_img.detach())
-        loss_fake = adversarial_loss(d_fake_out, torch.tensor((configs.batch_size, 1)).fill_(0.).requires_grad_(False))
+        loss_fake = adversarial_loss(d_fake_out.view(-1,1), 1. * torch.zeros((configs.batch_size, 1)).to(device).requires_grad_(False))
         
         d_loss = (loss_real + loss_fake)/2
         
@@ -212,7 +212,7 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         gen_out = G(latents)
         d_out = D(gen_out)
 
-        g_loss = adversarial_loss(d_out, torch.tensor((configs.batch_size, 1)).fill_(1.).requires_grad_(False))
+        g_loss = adversarial_loss(d_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
 
         G.zero_grad()
         g_loss.backward()
@@ -252,7 +252,7 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
 
         # learning rate decay
         
-        if i >= 10000 and i % 1000 == 0:
+        if i >= 100000 and i % 1000 == 0:
             g_lr -= (g_lr / float(100000))
             d_lr -= (d_lr / float(100000))
             for p_G, p_D in zip(optim_G.param_groups, optim_D.param_groups):

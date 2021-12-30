@@ -18,7 +18,7 @@ In training, these images are resized in 128 x 128.
 
 ## options and help
 
-```console
+```bat
 python main.py -h
 usage: main.py [-h] [--main_gpu MAIN_GPU] [--use_tensorboard USE_TENSORBOARD]
                [--log_dir LOG_DIR] [--image_name IMAGE_NAME]
@@ -59,7 +59,7 @@ optional arguments:
 
 ## Usage
 
-```console
+```bat
 python main.py --main_gpu 1 \
                 --use_tensorboard True \
                 --log_dir gpu1 \

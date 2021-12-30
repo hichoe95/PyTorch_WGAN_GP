@@ -51,7 +51,10 @@ def main(args):
 	else:
 		print("You should choose either one, Adam or RMSprop")
 
-	train(G, D, optim_G, optim_D, train_data, args)
+	if args.loss == 'wgangp':
+		train(G, D, optim_G, optim_D, train_data, args)
+	elif args.loss == 'bce':
+		train_bce(G, D, optim_G, optim_D, train_data, args)
 
 
 

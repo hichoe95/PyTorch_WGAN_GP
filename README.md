@@ -57,7 +57,7 @@ optional arguments:
 
 ```
 
-## Usage
+## Usage example
 
 ```bat
 python main.py --main_gpu 1 \

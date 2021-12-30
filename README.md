@@ -1,16 +1,32 @@
-# wgan_gp_clelbA_HQ
+# wgan_gp_CelebA
 
 This repository is only for training.
 
 ## Version
 
-pytorch=1.4.0=py3.6_cuda10.0.130_cudnn7.6.3_0
+- pytorch=1.4.0
+- pyyhon3.6
+- cuda10.0.x
+- cudnn7.6.3
+
+### Tensorboard
+
+To open tensorbaord window in local, if you run it on remote server, you should follow this command in local.
+
+```console
+ssh -NfL localhost:8898:localhost:6009 [USERID]@[IP]
+```
+
+'8898' is arbitrary port number for local , and '6009' is arbitrary port number for remote.
+
 
 * environment.yaml should be used for reference only, since it has too many dependencies.
 
 ## dataset - CelebA HQ
-size : 1024 x 1024.
-In training, these images are resized in 128 x 128.
+
+- size : 1024 x 1024.
+(In training, these images are resized in 128 x 128.)
+
 
 ### download link
 * https://drive.google.com/drive/folders/0B4qLcYyJmiz0TXY1NG02bzZVRGs?resourcekey=0-arAVTUfW9KRhN-irJchVKQ

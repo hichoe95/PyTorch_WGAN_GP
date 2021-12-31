@@ -70,9 +70,11 @@ optional arguments:
 python main.py --main_gpu 1 \
                 --use_tensorboard True \
                 --log_dir gpu1 \
+                --img_size 64 \
                 --latent_dim 128 \
                 --image_name gpu_1.png \
                 --batch_size 16 \
+                --weight_init True \
                 --n_critic 5 \
                 --lr 0.0002 \
                 --lambda_gp 10 \

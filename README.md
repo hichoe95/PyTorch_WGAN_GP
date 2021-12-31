@@ -16,7 +16,7 @@ This repository is only for training.
 ## dataset - CelebA HQ
 
 - size : 1024 x 1024.
-(In training, these images are resized in 128 x 128.)
+(In training, these images are resized in 128 x 128 or 64 x 64)
 
 ### download link
 * https://drive.google.com/drive/folders/0B4qLcYyJmiz0TXY1NG02bzZVRGs?resourcekey=0-arAVTUfW9KRhN-irJchVKQ

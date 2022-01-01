@@ -66,23 +66,23 @@ optional arguments:
 
 ## Usage example
 
+When I use 'RMSprop', it has the best training performance.
+
 ```bat
-python main.py --main_gpu 6 \
-                --use_tensorboard True \
-                --log_dir gpu6 \
-                --latent_dim 100 \
-                --image_name gpu_6.png \
-                --batch_size 16 \
-                --n_critic 4 \
-                --lr 0.0001 \
+python main.py --main_gpu 4 \
+                --log_dir gpu4 \
+                --latent_dim 128 \
+                --image_name gpu_4.png \
+                --batch_size 32 \
+                --n_critic 5 \
+                --lr 0.00005 \
                 --lambda_gp 10 \
-                --optim Adam \
+                --optim RMSprop \
                 --generator_upsample True \
-                --normalization inorm \
+                --normalization bnorm \
                 --nonlinearity leakyrelu \
                 --slope 0.2 \
                 --loss 'wgangp'
-                --weight init True
 ```
 
 

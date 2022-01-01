@@ -52,7 +52,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):
             reals = next(data_iter)
 
 
-        b_size = reals.size(0)
+        b_size = reals[0].size(0)
 
         if torch.cuda.is_available():
             reals = reals[0].to(device)
@@ -182,7 +182,7 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):
             data_iter = iter(dataset)
             reals = next(data_iter)
 
-        b_size = reals.size(0)
+        b_size = reals[0].size(0)
 
         if torch.cuda.is_available():
             reals = reals[0].to(device)

@@ -29,18 +29,20 @@ def main(args):
 
 	train_data = train_loader(configs = args)
 
-	if args.generator_upsample:
-		G = Generator_up(configs = args)
-	else:
-		G = Generator(configs = args)
+	# if args.generator_upsample:
+	# 	G = Generator_up(configs = args)
+	# else:
+	# 	G = Generator(configs = args)
 
+	G = Generator_up(configs = args)
 	D = Discriminator(configs = args)
 
 	print(f'Ratio of G and D params : {get_n_params(G)/get_n_params(D):f}')
 
-	# if args.weight_init:
-	# 	G.apply(weights_init_normal)
-	# 	D.apply(weights_init_normal)
+	if args.weight_init:
+		G.apply(weights_init)
+		D.apply(weights_init)
+		print('Weights of both G and D are initiated.')
 
 	if args.optim == 'Adam':
 		optim_D = optim.Adam(D.parameters(), lr=args.lr, betas=(0.5, 0.999))
@@ -50,13 +52,14 @@ def main(args):
 		optim_G = optim.RMSprop(G.parameters(), lr=args.lr)
 	else:
 		print("You should choose either one, Adam or RMSprop")
+		exit(0)
 
 	if args.loss == 'wgangp':
 		train(G, D, optim_G, optim_D, train_data, args)
 	elif args.loss == 'bce':
 		train_bce(G, D, optim_G, optim_D, train_data, args)
 
-
+	print('Training is finished !!')
 
 if __name__ == '__main__':
 	args = parse_args()

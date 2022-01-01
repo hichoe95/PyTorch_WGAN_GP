@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--n_critic", type=int, default=3, help="number of training steps for discriminator per iter")
     parser.add_argument("--lr", type=float, default=0.0001, help="learning rate")
     parser.add_argument("--lambda_gp", type=float, default=10, help="amount of gradient penalty loss")
-    # parser.add_argument("--weight_init", type=bool, default=False, help="conv weight init from normal dist")
+    parser.add_argument("--weight_init", type=bool, default=False, help="weight init from normal dist")
     parser.add_argument("--loss", type=str, default='wgangp', help="wgangp or bce, default is wgangp")
     parser.add_argument("--optim", type=str, default='Adam', help="choose only Adam or RMSprop")
     parser.add_argument("--generator_upsample", type=bool, default=False, help="if False, using ConvTranspose.")

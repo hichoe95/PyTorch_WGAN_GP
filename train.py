@@ -5,7 +5,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
-from torch.autograd import Variable
 import torch.nn as nn
 import torch.nn.functional as F
 import os.path
@@ -37,15 +36,21 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
 
         latent_fixed = torch.randn((3, configs.latent_dim)).to(device)
     
+
     data_iter = iter(dataset)
-    
+
     g_lr = configs.lr
     d_lr = configs.lr
     
         
     for i in tqdm(range(configs.iter_num)):
         
-        reals = next(data_iter)
+        try:
+            reals = next(data_iter)
+        except:
+            data_iter = iter(dataset)
+            reals = next(data_iter)
+
 
         if torch.cuda.is_available():
             reals = reals[0].to(device)
@@ -120,9 +125,8 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
                     plt.subplot(gs[0,j])
                     plt.imshow(minmax(imgs[j].detach().cpu()).permute(1,2,0))
                     plt.axis('off')
-                    plt.tight_layout()
                     
-                plt.savefig(configs.image_name)
+                plt.savefig(configs.image_name, bbox_inches='tight')
                 
                 # print(f'D/d_loss: {loss['D/d_loss']:.2f}, D/loss_real: {loss['D/loss_real']:.2f}, D/loss_fake: {loss['D/loss_fake']:.2f}, G/loss_fake: {loss['G/loss_fake']:.2f}')
 
@@ -178,6 +182,9 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         
         # discriminator
         
+        G.zero_grad()
+        D.zero_grad()
+
         # for real
         d_real_out = D(reals)
         loss_real = adversarial_loss(d_real_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
@@ -186,11 +193,8 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         fake_img = G(latents)
         d_fake_out = D(fake_img.detach())
         loss_fake = adversarial_loss(d_fake_out.view(-1,1), 1. * torch.zeros((configs.batch_size, 1)).to(device).requires_grad_(False))
-        
         d_loss = (loss_real + loss_fake)/2
         
-        G.zero_grad()
-        D.zero_grad()
         d_loss.backward()
         optim_D.step()
         
@@ -206,15 +210,16 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         loss['D/d_loss'] = d_loss.item()
         
         # generator
-            
+        
+        G.zero_grad()
+
         latents = torch.randn((configs.batch_size, configs.latent_dim)).to(device)
 
         gen_out = G(latents)
         d_out = D(gen_out)
 
         g_loss = adversarial_loss(d_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
-
-        G.zero_grad()
+        
         g_loss.backward()
         optim_G.step()
         
@@ -236,10 +241,8 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
                     plt.subplot(gs[0,j])
                     plt.imshow(minmax(imgs[j].detach().cpu()).permute(1,2,0))
                     plt.axis('off')
-                    plt.tight_layout()
-
                     
-                plt.savefig(configs.image_name)
+                plt.savefig(configs.image_name, bbox_inches='tight')
                 
                 # print(f'D/d_loss: {loss['D/d_loss']:.2f}, D/loss_real: {loss['D/loss_real']:.2f}, D/loss_fake: {loss['D/loss_fake']:.2f}, G/loss_fake: {loss['G/loss_fake']:.2f}')
 

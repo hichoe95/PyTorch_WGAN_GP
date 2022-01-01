@@ -135,9 +135,11 @@ def train(G, D, optim_G, optim_D, dataset, configs):
         # Save model checkpoints.
         if not os.path.exists(f'./checkpoint{configs.main_gpu:d}'):
             os.mkdir(f'./checkpoint{configs.main_gpu:d}')
-        if (i+1) % 10000 == 0:
+        if (i+1) % 50000 == 0:
             G_path = os.path.join(f'./checkpoint{configs.main_gpu:d}', '{}-G.ckpt'.format(i+1))
             D_path = os.path.join(f'./checkpoint{configs.main_gpu:d}', '{}-D.ckpt'.format(i+1))
+            torch.save(G.state_dict(), G_path)
+            torch.save(D.state_dict(), D_path)
 
         # learning rate decay
         
@@ -257,9 +259,11 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):
         # Save model checkpoints.
         if not os.path.exists(f'./checkpoint{configs.main_gpu:d}'):
             os.mkdir(f'./checkpoint{configs.main_gpu:d}')
-        if (i+1) % 10000 == 0:
+        if (i+1) % 50000 == 0:
             G_path = os.path.join(f'./checkpoint{configs.main_gpu:d}', '{}-G.ckpt'.format(i+1))
             D_path = os.path.join(f'./checkpoint{configs.main_gpu:d}', '{}-D.ckpt'.format(i+1))
+            torch.save(G.state_dict(), G_path)
+            torch.save(D.state_dict(), D_path)
 
         # learning rate decay
         

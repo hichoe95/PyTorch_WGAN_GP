@@ -67,22 +67,22 @@ optional arguments:
 ## Usage example
 
 ```bat
-python main.py --main_gpu 1 \
+python main.py --main_gpu 6 \
                 --use_tensorboard True \
-                --log_dir gpu1 \
-                --img_size 64 \
-                --latent_dim 128 \
-                --image_name gpu_1.png \
+                --log_dir gpu6 \
+                --latent_dim 100 \
+                --image_name gpu_6.png \
                 --batch_size 16 \
-                --weight_init True \
-                --n_critic 5 \
-                --lr 0.0002 \
+                --n_critic 4 \
+                --lr 0.0001 \
                 --lambda_gp 10 \
                 --optim Adam \
                 --generator_upsample True \
                 --normalization inorm \
                 --nonlinearity leakyrelu \
-                --slope 0.1
+                --slope 0.2 \
+                --loss 'wgangp'
+                --weight init True
 ```
 
 

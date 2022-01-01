@@ -31,14 +31,17 @@ class Data_Loader(data.Dataset):
     def preprocess(self):
         file_list = os.listdir(self.img_dir)
         
+        print("Total {:d} images.".format(len(file_list)))
+
         random.seed(1234)
         
-        for i in range(len(file_list)*80):
+        for i, file in enumerate(file_list):
             
-            if (i+1)< 500:
-                self.test_dataset.append([random.choice(file_list), self.label])
-            else:
-                self.train_dataset.append([random.choice(file_list), self.label])
+            # if (i+1)< 500:
+            #     self.test_dataset.append([random.choice(file_list), self.label])
+            # else:
+                # self.train_dataset.append([random.choice(file_list), self.label])
+            self.train_dataset.append([file, self.label])
             
         print('Finished preprocessing...')
         

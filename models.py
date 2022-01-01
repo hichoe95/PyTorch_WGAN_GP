@@ -14,7 +14,7 @@ class ConvBlock(nn.Module):
         # up or down or same
         if type == 'up':
             if args.generator_upsample:
-                layers.append(nn.Upsample(scale_factor = 2))
+                layers.append(nn.Upsample(scale_factor = 2, mode = 'bilinear', align_corners = False))
                 layers.append(nn.Conv2d(in_ch, out_ch, 3, 1, 1, bias = bias))
             else:
                 layers.append(nn.ConvTranspose2d(in_ch, out_ch, 4, 2, 1, bias = bias))
@@ -64,7 +64,12 @@ class Generator(nn.Module):
 
         # channel up
         # 512, 1024, 2048
-        for i in range(4):
+        if configs.img_size == 64:
+            iter_num = 3
+        elif configs.img_size == 128:
+            iter_num = 4
+
+        for i in range(iter_num):
             out_ch = in_ch * 2 if i<3 else in_ch
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
             layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
@@ -104,7 +109,14 @@ class Generator_up(nn.Module):
         layers.append(ConvBlock(args = configs, in_ch = self.latent_dim, out_ch = in_ch, bias = False, type = 'up'))
         
         # channel up
-        for out_ch in [256, 512, 1024, 1024, 512, 256]:
+
+        if configs.img_size == 64:
+            ch_list = [256, 512, 1024, 512, 256]
+        elif configs.img_size == 128:
+            ch_list = [256, 512, 1024, 1024, 512, 256]
+
+
+        for out_ch in ch_list:
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = False, type = 'up'))
             layers.append(ConvBlock(args = configs, in_ch = out_ch, out_ch = out_ch, bias = False, type = 'same'))
             in_ch = out_ch
@@ -136,7 +148,12 @@ class Discriminator(nn.Module):
         # channel up
         # 128, 256, 512, 1024, 2048
         # 32, 16, 8, 4, 2, 1. 
-        for i in range(6):
+        if configs.img_size == 64:
+            iter_num = 5
+        elif configs.img_size == 128:
+            iter_num = 6
+
+        for i in range(iter_num):
             out_ch = in_ch * 2 if i < 4 else in_ch
             layers.append(ConvBlock(args = configs, in_ch = in_ch, out_ch = out_ch, bias = True, type = 'down'))
             in_ch = out_ch

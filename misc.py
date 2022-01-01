@@ -6,11 +6,19 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+def weights_init(model):
 
-# def weights_init_normal(m):
-#     classname = m.__class__.__name__
-#     if classname.find('Conv') != -1:
-#         torch.nn.init.normal_(m.weight.data, 0.0, 0.02)
+    for m in model.modules():
+        if isinstance(m, nn.Conv2d):
+            nn.init.normal_(m.weight.data, 0.0, 0.02)
+
+            if m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+
+        elif isinstance(m, nn.BatchNorm2d):
+            nn.init.normal_(m.weight.data, 1.0, 0.02)
+            nn.init.constant_(m.bias.data, 0)
+
 
 def minmax(x):
     return (x - x.min())/(x.max() - x.min())

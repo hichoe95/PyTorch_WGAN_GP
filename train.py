@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 from misc import *
 
-def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size = 30):
+def train(G, D, optim_G, optim_D, dataset, configs):
     
     if configs.use_tensorboard:
         from tensorboardX import SummaryWriter
@@ -52,9 +52,11 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
             reals = next(data_iter)
 
 
+        b_size = reals.size(0)
+
         if torch.cuda.is_available():
             reals = reals[0].to(device)
-            latents = torch.randn((configs.batch_size, configs.latent_dim)).to(device)
+            latents = torch.randn((b_size, configs.latent_dim)).to(device)
         
         # discriminator
         
@@ -69,7 +71,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
         
         
         # grad penalty
-        alpha = torch.rand(reals.size(0), 1, 1, 1).to(device)
+        alpha = torch.rand(b_size, 1, 1, 1).to(device)
         x_hat = (alpha * reals.data + (1- alpha) * fake_img.data).requires_grad_(True)
         out = D(x_hat)
         d_loss_gp = gradient_penalty(out, x_hat, device)
@@ -96,7 +98,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
         # generator
         if (i+1) % configs.n_critic == 0:
             
-            latents = torch.randn((configs.batch_size, configs.latent_dim)).to(device)
+            latents = torch.randn((b_size, configs.latent_dim)).to(device)
 
             gen_out = G(latents)
             d_out = D(gen_out)
@@ -147,7 +149,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size 
                 p_D['lr'] = d_lr
 
 
-def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_size = 30):
+def train_bce(G, D, optim_G, optim_D, dataset, configs):
     
     if configs.use_tensorboard:
         from tensorboardX import SummaryWriter
@@ -174,11 +176,17 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         
     for i in tqdm(range(configs.iter_num)):
         
-        reals = next(data_iter)
+        try:
+            reals = next(data_iter)
+        except:
+            data_iter = iter(dataset)
+            reals = next(data_iter)
+
+        b_size = reals.size(0)
 
         if torch.cuda.is_available():
             reals = reals[0].to(device)
-            latents = torch.randn((configs.batch_size, configs.latent_dim)).to(device)
+            latents = torch.randn((b_size, configs.latent_dim)).to(device)
         
         # discriminator
         
@@ -187,12 +195,12 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
 
         # for real
         d_real_out = D(reals)
-        loss_real = adversarial_loss(d_real_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
+        loss_real = adversarial_loss(d_real_out.view(-1,1), 1. * torch.ones((b_size, 1)).to(device).requires_grad_(False))
         
         # for fake
         fake_img = G(latents)
         d_fake_out = D(fake_img.detach())
-        loss_fake = adversarial_loss(d_fake_out.view(-1,1), 1. * torch.zeros((configs.batch_size, 1)).to(device).requires_grad_(False))
+        loss_fake = adversarial_loss(d_fake_out.view(-1,1), 1. * torch.zeros((b_size, 1)).to(device).requires_grad_(False))
         d_loss = (loss_real + loss_fake)/2
         
         d_loss.backward()
@@ -213,12 +221,12 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):#iter_num = 100, batch_s
         
         G.zero_grad()
 
-        latents = torch.randn((configs.batch_size, configs.latent_dim)).to(device)
+        latents = torch.randn((b_size, configs.latent_dim)).to(device)
 
         gen_out = G(latents)
         d_out = D(gen_out)
 
-        g_loss = adversarial_loss(d_out.view(-1,1), 1. * torch.ones((configs.batch_size, 1)).to(device).requires_grad_(False))
+        g_loss = adversarial_loss(d_out.view(-1,1), 1. * torch.ones((b_size, 1)).to(device).requires_grad_(False))
         
         g_loss.backward()
         optim_G.step()

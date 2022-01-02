@@ -1,7 +1,10 @@
 # wgan_gp_CelebA
 
 This repository is only for training.
-Later, I will provide/upload pretrained weight.
+Later, I will provide/upload pretrained weight.  
+
+![](https://github.com/hichoe95/WGAN_GP_CelebAHQ/blob/main/image/gpu_4.png?raw=true)
+
 
 ## Version
 
@@ -85,6 +88,7 @@ python main.py --main_gpu 4 \
                 --slope 0.2 \
                 --loss 'wgangp'
 ```
+![](https://github.com/hichoe95/WGAN_GP_CelebAHQ/blob/main/image/gpu_4.png?raw=true)
 
 
 ## Tensorboard

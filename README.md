@@ -1,6 +1,7 @@
 # wgan_gp_CelebA
 
 This repository is only for training.
+Later, I will provide/upload pretrained weight.
 
 ## Version
 

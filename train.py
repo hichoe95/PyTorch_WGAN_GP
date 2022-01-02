@@ -129,6 +129,7 @@ def train(G, D, optim_G, optim_D, dataset, configs):
                     plt.axis('off')
                     
                 plt.savefig(configs.image_name, bbox_inches='tight')
+                plt.close('all')
                 
                 # print(f'D/d_loss: {loss['D/d_loss']:.2f}, D/loss_real: {loss['D/loss_real']:.2f}, D/loss_fake: {loss['D/loss_fake']:.2f}, G/loss_fake: {loss['G/loss_fake']:.2f}')
 
@@ -163,11 +164,15 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):
     
     device = f'cuda:{configs.main_gpu:d}' if torch.cuda.is_available() else 'cpu'
     
+    # for visualization.
+    latent_fixed = torch.randn((3, configs.latent_dim))
+
     if torch.cuda.is_available():
         G.to(device)
         D.to(device)
 
-        latent_fixed = torch.randn((3, configs.latent_dim)).to(device)
+        latent_fixed = latent_fixed.to(device)
+        
     
     data_iter = iter(dataset)
     
@@ -253,6 +258,7 @@ def train_bce(G, D, optim_G, optim_D, dataset, configs):
                     plt.axis('off')
                     
                 plt.savefig(configs.image_name, bbox_inches='tight')
+                plt.close('all')
                 
                 # print(f'D/d_loss: {loss['D/d_loss']:.2f}, D/loss_real: {loss['D/loss_real']:.2f}, D/loss_fake: {loss['D/loss_fake']:.2f}, G/loss_fake: {loss['G/loss_fake']:.2f}')
 

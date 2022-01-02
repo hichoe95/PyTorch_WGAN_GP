@@ -2,14 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import torch
+import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
 import torch.nn as nn
+import torch.nn.functional as F
 import os.path
+import torch.nn.parallel
 import torch.utils.data as data
 import torchvision.datasets as datasets
+import torchvision.models as models
 import random
+from matplotlib import gridspec
 from tqdm import tqdm
+
 
 from config import *
 from misc import *
@@ -26,7 +32,7 @@ def main(args):
 	G = Generator(configs = args)
 	D = Discriminator(configs = args)
 
-	print(f'Ratio of G and D params : {get_n_params(G)/get_n_params(D):f}')
+	print(f'Ratio of params ( # of G params / # of D params )  : {get_n_params(G)/get_n_params(D):f}')
 
 	if args.weight_init:
 		G.apply(weights_init)

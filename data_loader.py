@@ -57,13 +57,13 @@ class Data_Loader(data.Dataset):
         return self.num_imgs
 
 
-def get_loader(configs, img_dir, label, mode='train', num_workers=1):
+def get_loader(configs, label, mode='train', num_workers=1):
     
     transform = transforms.Compose([transforms.Resize(configs.img_size),
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     
-    dataset = Data_Loader(img_dir = img_dir , transform = transform , label = label, mode = mode)
+    dataset = Data_Loader(img_dir = configs.train_data_root, transform = transform , label = label, mode = mode)
     
     data_loader = data.DataLoader(dataset = dataset,
                                   batch_size = configs.batch_size,
@@ -73,11 +73,10 @@ def get_loader(configs, img_dir, label, mode='train', num_workers=1):
 
 
 
-def train_loader(configs, root = '../../../../data/hwanil/CelebA_HQ/data1024x1024/'):
+def train_loader(configs):
     
     batch_size = configs.batch_size
     train_data = get_loader(configs,
-                            root,
                             label = 1,
                             mode = 'train',
                             num_workers = 1)

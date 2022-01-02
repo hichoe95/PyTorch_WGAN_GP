@@ -88,8 +88,8 @@ python main.py --main_gpu 4 \
                 --slope 0.2 \
                 --loss 'wgangp'
 ```
+### Results
 ![](https://github.com/hichoe95/WGAN_GP_CelebAHQ/blob/main/image/gpu_4.png?raw=true)
-
 
 ## Tensorboard
 

@@ -10,7 +10,8 @@ def parse_args():
     parser.add_argument("--main_gpu", type=int, default=4, help="main gpu index")
     parser.add_argument("--use_tensorboard", type=bool, default=True, help="Tensorboard")
     parser.add_argument("--log_dir", type=str, default = 'runs', help="dir for tensorboard")
-    parser.add_argument("--image_name", type = str, default = 'gen_images', help="")
+    parser.add_argument("--image_name", type = str, default = 'gen_images', help="sample image name")
+    parser.add_argument("--train_data_root", type = str, default = '../../../../data/hwanil/CelebA_HQ/data1024x1024/')
 
     # optimizer
     parser.add_argument("--optim", type=str, default='Adam', help="Adam or RMSprop")

@@ -30,41 +30,48 @@ Later, I will provide/upload pretrained weight.
 ## options and help
 
 ```bat
-python main.py -h
 usage: main.py [-h] [--main_gpu MAIN_GPU] [--use_tensorboard USE_TENSORBOARD]
                [--log_dir LOG_DIR] [--image_name IMAGE_NAME]
-               [--iter_num ITER_NUM] [--img_size IMG_SIZE]
-               [--latent_dim LATENT_DIM] [--batch_size BATCH_SIZE]
-               [--n_critic N_CRITIC] [--lr LR] [--lambda_gp LAMBDA_GP]
-               [--optim OPTIM] [--generator_upsample GENERATOR_UPSAMPLE]
-               [--normalization NORMALIZATION] [--nonlinearity NONLINEARITY]
-               [--slope SLOPE]
+               [--train_data_root TRAIN_DATA_ROOT] [--optim OPTIM] [--lr LR]
+               [--betas BETAS] [--latent_dim LATENT_DIM]
+               [--generator_upsample GENERATOR_UPSAMPLE]
+               [--weight_init WEIGHT_INIT] [--normalization NORMALIZATION]
+               [--nonlinearity NONLINEARITY] [--slope SLOPE]
+               [--batch_size BATCH_SIZE] [--iter_num ITER_NUM]
+               [--img_size IMG_SIZE] [--loss LOSS] [--n_critic N_CRITIC]
+               [--lambda_gp LAMBDA_GP]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --main_gpu MAIN_GPU   main gpu index for training
+  --main_gpu MAIN_GPU   main gpu index
   --use_tensorboard USE_TENSORBOARD
                         Tensorboard
   --log_dir LOG_DIR     dir for tensorboard
   --image_name IMAGE_NAME
-  --iter_num ITER_NUM   number of iterations of training
-  --img_size IMG_SIZE   size of each image dimension
+                        sample image name
+  --train_data_root TRAIN_DATA_ROOT
+  --optim OPTIM         Adam or RMSprop
+  --lr LR               learning rate
+  --betas BETAS         For Adam optimizer.
   --latent_dim LATENT_DIM
                         dimension of latent vector
-  --batch_size BATCH_SIZE
-                        size of the batches
-  --n_critic N_CRITIC   number of training steps for discriminator per iter
-  --lr LR               learning rate
-  --lambda_gp LAMBDA_GP
-                        amount of gradient penalty loss
-  --optim OPTIM         choose only Adam or RMSprop
   --generator_upsample GENERATOR_UPSAMPLE
                         if False, using ConvTranspose.
+  --weight_init WEIGHT_INIT
+                        weight init from normal dist
   --normalization NORMALIZATION
                         inorm : instancenorm, bnorm : batchnorm, or None
   --nonlinearity NONLINEARITY
                         relu or leakyrelu
-  --slope SLOPE         if using leakyrelu, you can use this option
+  --slope SLOPE         if using leakyrelu, you can use this option.
+  --batch_size BATCH_SIZE
+                        size of the batches
+  --iter_num ITER_NUM   number of iterations of training
+  --img_size IMG_SIZE   size of each image dimension
+  --loss LOSS           wgangp or bce, default is wgangp
+  --n_critic N_CRITIC   number of training steps for discriminator per iter
+  --lambda_gp LAMBDA_GP
+                        amount of gradient penalty loss
 
 ```
 

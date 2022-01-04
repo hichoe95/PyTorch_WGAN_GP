@@ -17,7 +17,9 @@ def parse_args():
     # optimizer
     parser.add_argument("--optim", type=str, default='Adam', help="Adam or RMSprop")
     parser.add_argument("--lr", type=float, default=0.0001, help="learning rate")
-    parser.add_argument("--betas", type=tuple, default = (0.5, 0.999), help="For Adam optimizer.")
+    parser.add_argument("--beta1", type=float, default = 0.5, help="For Adam optimizer.")
+    parser.add_argument("--beta2", type=float, default = 0.999, help="For Adam optimizer.")
+
 
     # model
     parser.add_argument("--latent_dim", type = int, default=128, help="dimension of latent vector")

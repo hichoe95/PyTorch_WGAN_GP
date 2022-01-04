@@ -1,4 +1,4 @@
-# wgan_gp_CelebA
+# wgan_gp_tutorial
 
 This repository is only for training.
 Later, I will provide/upload pretrained weight.  
@@ -25,13 +25,17 @@ Later, I will provide/upload pretrained weight.
 
 (In training, **CelebA HQ** images are resized in 128 x 128 or 64 x 64)
 
+You should change the name of directory root in data_loder.py.
+
 ## options and help
 
 ```bash
+wgan_gp$ python main.py -h
 usage: main.py [-h] [--main_gpu MAIN_GPU] [--use_tensorboard USE_TENSORBOARD]
-               [--log_dir LOG_DIR] [--image_name IMAGE_NAME]
-               [--train_data_root TRAIN_DATA_ROOT] [--optim OPTIM] [--lr LR]
-               [--betas BETAS] [--latent_dim LATENT_DIM]
+               [--checkpoint_dir CHECKPOINT_DIR] [--log_dir LOG_DIR]
+               [--image_name IMAGE_NAME] [--train_data TRAIN_DATA]
+               [--optim OPTIM] [--lr LR] [--betas BETAS]
+               [--latent_dim LATENT_DIM]
                [--generator_upsample GENERATOR_UPSAMPLE]
                [--weight_init WEIGHT_INIT] [--normalization NORMALIZATION]
                [--nonlinearity NONLINEARITY] [--slope SLOPE]
@@ -44,10 +48,13 @@ optional arguments:
   --main_gpu MAIN_GPU   main gpu index
   --use_tensorboard USE_TENSORBOARD
                         Tensorboard
+  --checkpoint_dir CHECKPOINT_DIR
+                        full name is './checkponit'.format(main_gpu)
   --log_dir LOG_DIR     dir for tensorboard
   --image_name IMAGE_NAME
                         sample image name
-  --train_data_root TRAIN_DATA_ROOT
+  --train_data TRAIN_DATA
+                        celeba or ffhq
   --optim OPTIM         Adam or RMSprop
   --lr LR               learning rate
   --betas BETAS         For Adam optimizer.
@@ -78,21 +85,21 @@ optional arguments:
 When I use 'RMSprop', it has the best training performance.
 
 ```bash
-$root python main.py --main_gpu 4 \
-                     --log_dir gpu4 \
-                     --train_data celeba
-                     --latent_dim 128 \
-                     --image_name gpu_4.png \
-                     --batch_size 32 \
-                     --n_critic 5 \
-                     --lr 0.00005 \
-                     --lambda_gp 10 \
-                     --optim RMSprop \
-                     --generator_upsample True \
-                     --normalization bnorm \
-                     --nonlinearity leakyrelu \
-                     --slope 0.2 \
-                     --loss wgangp
+wgan_gp$ python main.py --main_gpu 4 \
+                        --log_dir gpu4 \
+                        --train_data celeba
+                        --latent_dim 128 \
+                        --image_name gpu_4.png \
+                        --batch_size 32 \
+                        --n_critic 5 \
+                        --lr 0.00005 \
+                        --lambda_gp 10 \
+                        --optim RMSprop \
+                        --generator_upsample True \
+                        --normalization bnorm \
+                        --nonlinearity leakyrelu \
+                        --slope 0.2 \
+                        --loss wgangp
 ```
 ### Results - CelebA HQ
 ![](https://github.com/hichoe95/WGAN_GP_CelebAHQ/blob/main/image/gpu_4.png?raw=true)

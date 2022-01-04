@@ -14,13 +14,16 @@ import PIL
 
 
 class Data_Loader(data.Dataset):
-    def __init__(self, img_dir, transform, label, mode):
-        self.img_dir = img_dir
+    def __init__(self, train_data, transform, label, mode):
+        self.train_data = train_data
         self.transform = transform
         self.label = label
         self.mode = mode
         self.train_dataset = []
         self.test_dataset = []
+        self.file_list = []
+
+        self.load_train_data()
         self.preprocess()
         
         if mode == 'train':
@@ -28,28 +31,37 @@ class Data_Loader(data.Dataset):
         else:
             self.num_imgs = len(self.test_dataset)
     
-    def preprocess(self):
-        file_list = os.listdir(self.img_dir)
+    def load_train_data(self,):
         
-        print("Total {:d} images.".format(len(file_list)))
+        if self.train_data == 'celeba':
+            self.train_data_dir = '/data/hwanil/CelebA_HQ/data1024x1024/'
+            self.file_list.extend(os.listdir(self.train_data_dir))
+
+        elif self.train_data == 'ffhq':
+            self.train_data_dir = '/data/hwanil/ffhq-dataset/thumbnails128x128/'
+
+            folders = os.listdir(self.train_data_dir)
+            for f in folders:
+                folder_name = os.path.join(self.train_data_dir, f)
+                if os.path.isdir(folder_name):
+                    self.file_list.extend([os.path.join(f, img) for img in os.listdir(folder_name)])
+
+        print("Total {:d} {} images.".format(len(self.file_list), self.train_data))
+
+    def preprocess(self):
 
         random.seed(1234)
         
-        for i, file in enumerate(file_list):
-            
-            # if (i+1)< 500:
-            #     self.test_dataset.append([random.choice(file_list), self.label])
-            # else:
-                # self.train_dataset.append([random.choice(file_list), self.label])
+        for i, file in enumerate(self.file_list):
             self.train_dataset.append([file, self.label])
             
         print('Finished preprocessing...')
         
     def __getitem__(self,index):
-        dataset = self.train_dataset if self.mode == 'train' else self.test_dataset
+        dataset = self.train_dataset # if self.mode == 'train' else self.test_dataset
         filename, label = dataset[index]
         
-        image = Image.open(os.path.join(self.img_dir, filename))
+        image = Image.open(os.path.join(self.train_data_dir, filename))
         
         return self.transform(image), label
         
@@ -62,8 +74,8 @@ def get_loader(configs, label, mode='train', num_workers=1):
     transform = transforms.Compose([transforms.Resize(configs.img_size),
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    
-    dataset = Data_Loader(img_dir = configs.train_data_root, transform = transform , label = label, mode = mode)
+
+    dataset = Data_Loader(train_data = configs.train_data, transform = transform , label = label, mode = mode)
     
     data_loader = data.DataLoader(dataset = dataset,
                                   batch_size = configs.batch_size,

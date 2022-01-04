@@ -40,8 +40,8 @@ def main(args):
 		print('Weights of both G and D are initiated.')
 
 	if args.optim == 'Adam':
-		optim_D = optim.Adam(D.parameters(), lr=args.lr, betas=args.betas)
-		optim_G = optim.Adam(G.parameters(), lr=args.lr, betas=args.betas)
+		optim_D = optim.Adam(D.parameters(), lr=args.lr, betas=(args.beta1, args.beta2))
+		optim_G = optim.Adam(G.parameters(), lr=args.lr, betas=(args.beta1, args.beta2))
 	elif args.optim == 'RMSprop':
 		optim_D = optim.RMSprop(D.parameters(), lr=args.lr)
 		optim_G = optim.RMSprop(G.parameters(), lr=args.lr)
@@ -58,4 +58,5 @@ def main(args):
 
 if __name__ == '__main__':
 	args = parse_args()
+
 	main(args)

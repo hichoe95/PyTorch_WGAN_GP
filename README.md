@@ -17,13 +17,19 @@ Later, I will provide/upload pretrained weight.
 
 
 
-## dataset - CelebA HQ
+## dataset - CelebA HQ, FFHQ
 
+### CelebA HQ
 - size : 1024 x 1024.
 (In training, these images are resized in 128 x 128 or 64 x 64)
-
-### download link
+- download link
 * https://drive.google.com/drive/folders/0B4qLcYyJmiz0TXY1NG02bzZVRGs?resourcekey=0-arAVTUfW9KRhN-irJchVKQ
+
+### FFHQ
+- size : 1024 x 1024
+(In training, thumbnails128*128 images will be used.)
+-download link
+* https://drive.google.com/drive/folders/1tg-Ur7d4vk1T8Bn0pPpUSQPxlPGBlGfv
 
 
 
@@ -82,6 +88,7 @@ When I use 'RMSprop', it has the best training performance.
 ```bat
 python main.py --main_gpu 4 \
                 --log_dir gpu4 \
+                --train_data celeba
                 --latent_dim 128 \
                 --image_name gpu_4.png \
                 --batch_size 32 \
@@ -95,7 +102,7 @@ python main.py --main_gpu 4 \
                 --slope 0.2 \
                 --loss 'wgangp'
 ```
-### Results
+### Results - CelebA HQ
 ![](https://github.com/hichoe95/WGAN_GP_CelebAHQ/blob/main/image/gpu_4.png?raw=true)
 
 ## Tensorboard

@@ -27,7 +27,7 @@ Later, I will provide/upload pretrained weight.
 
 You should change the name of directory root in data_loder.py.
 
-## options and help
+## Options and Help
 
 ```bash
 wgan_gp$ python main.py -h

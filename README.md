@@ -80,7 +80,7 @@ optional arguments:
 
 ```
 
-## Usage example
+## Training
 
 When I use 'RMSprop', it has the best training performance.
 

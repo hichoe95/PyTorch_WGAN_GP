@@ -1,4 +1,4 @@
-# wgan_gp_tutorial
+# PyTorch WGAN GP
 
 This repository is only for training.
 Later, I will provide/upload pretrained weight.  

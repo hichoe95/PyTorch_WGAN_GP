@@ -34,10 +34,10 @@ wgan_gp$ python main.py -h
 usage: main.py [-h] [--main_gpu MAIN_GPU] [--use_tensorboard USE_TENSORBOARD]
                [--checkpoint_dir CHECKPOINT_DIR] [--log_dir LOG_DIR]
                [--image_name IMAGE_NAME] [--train_data TRAIN_DATA]
-               [--optim OPTIM] [--lr LR] [--betas BETAS]
+               [--optim OPTIM] [--lr LR] [--beta1 BETA1] [--beta2 BETA2]
                [--latent_dim LATENT_DIM]
                [--generator_upsample GENERATOR_UPSAMPLE]
-               [--weight_init WEIGHT_INIT] [--normalization NORMALIZATION]
+               [--weight_init WEIGHT_INIT] [--norm_g NORM_G] [--norm_d NORM_D]
                [--nonlinearity NONLINEARITY] [--slope SLOPE]
                [--batch_size BATCH_SIZE] [--iter_num ITER_NUM]
                [--img_size IMG_SIZE] [--loss LOSS] [--n_critic N_CRITIC]
@@ -57,15 +57,18 @@ optional arguments:
                         celeba or ffhq
   --optim OPTIM         Adam or RMSprop
   --lr LR               learning rate
-  --betas BETAS         For Adam optimizer.
+  --beta1 BETA1         For Adam optimizer.
+  --beta2 BETA2         For Adam optimizer.
   --latent_dim LATENT_DIM
                         dimension of latent vector
   --generator_upsample GENERATOR_UPSAMPLE
                         if False, using ConvTranspose.
   --weight_init WEIGHT_INIT
                         weight init from normal dist
-  --normalization NORMALIZATION
-                        inorm : instancenorm, bnorm : batchnorm, or None
+  --norm_g NORM_G       inorm : instancenorm, bnorm : batchnorm, lnorm :
+                        layernorm or None for Generator
+  --norm_d NORM_D       inorm : instancenorm, bnorm : batchnorm, lnorm :
+                        layernorm or None for discriminator(critic)
   --nonlinearity NONLINEARITY
                         relu or leakyrelu
   --slope SLOPE         if using leakyrelu, you can use this option.
@@ -77,7 +80,6 @@ optional arguments:
   --n_critic N_CRITIC   number of training steps for discriminator per iter
   --lambda_gp LAMBDA_GP
                         amount of gradient penalty loss
-
 ```
 
 ## Training

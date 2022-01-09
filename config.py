@@ -25,7 +25,8 @@ def parse_args():
     parser.add_argument("--latent_dim", type = int, default=128, help="dimension of latent vector")
     parser.add_argument("--generator_upsample", type=bool, default=False, help="if False, using ConvTranspose.")
     parser.add_argument("--weight_init", type=bool, default=False, help="weight init from normal dist")
-    parser.add_argument("--normalization", type=str, default='None', help="inorm : instancenorm, bnorm : batchnorm, or None")
+    parser.add_argument("--norm_g", type=str, default='None', help="inorm : instancenorm, bnorm : batchnorm, lnorm : layernorm or None for Generator")
+    parser.add_argument("--norm_d", type=str, default='None', help="inorm : instancenorm, bnorm : batchnorm, lnorm : layernorm or None for discriminator(critic)")
     parser.add_argument("--nonlinearity", type=str, default='relu', help="relu or leakyrelu")
     parser.add_argument("--slope", type=float, default = 0.2, help="if using leakyrelu, you can use this option.")
 
@@ -34,7 +35,7 @@ def parse_args():
     parser.add_argument("--iter_num", type=int, default=200000, help="number of iterations of training")
     parser.add_argument("--img_size", type=int, default=128, help="size of each image dimension")
     parser.add_argument("--loss", type=str, default='wgangp', help="wgangp or bce, default is wgangp")
-    parser.add_argument("--n_critic", type=int, default=3, help="number of training steps for discriminator per iter")
+    parser.add_argument("--n_critic", type=int, default=5, help="number of training steps for discriminator per iter")
     parser.add_argument("--lambda_gp", type=float, default=10, help="amount of gradient penalty loss")
     
     config = parser.parse_args()

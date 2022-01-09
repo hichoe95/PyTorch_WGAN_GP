@@ -96,7 +96,8 @@ wgan_gp$ python main.py --main_gpu 4 \
                         --lambda_gp 10 \
                         --optim RMSprop \
                         --generator_upsample True \
-                        --normalization bnorm \
+                        --norm_g bnorm \
+                        --norm_d lnorm \
                         --nonlinearity leakyrelu \
                         --slope 0.2 \
                         --loss wgangp

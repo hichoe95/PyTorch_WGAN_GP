@@ -25,7 +25,7 @@ Later, I will provide/upload pretrained weight.
 
 (In training, **CelebA HQ** images are resized in 128 x 128 or 64 x 64)
 
-You should change the name of directory root in data_loder.py.
+You should change the directory name in data_loder.py.
 
 ## Options and Help
 

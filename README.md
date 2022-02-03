@@ -29,7 +29,7 @@ You should change the directory name in data_loder.py.
 
 ## Options and Help
 
-```bash
+```
 wgan_gp$ python main.py -h
 usage: main.py [-h] [--main_gpu MAIN_GPU] [--use_tensorboard USE_TENSORBOARD]
                [--checkpoint_dir CHECKPOINT_DIR] [--log_dir LOG_DIR]
@@ -86,7 +86,7 @@ optional arguments:
 
 When I use 'RMSprop', it has the best training performance.
 
-```bash
+```
 wgan_gp$ python main.py --main_gpu 4 \
                         --log_dir gpu4 \
                         --train_data celeba
